@@ -20,7 +20,7 @@ class TestCqlTracing(Tester):
     #      instantiated when specified as a custom tracing implementation.
     """
 
-    def prepare(self, create_keyspace=True, nodes=3, rf=3, protocol_version=3, jvm_args=None, random_partitioner=False, **kwargs):
+    def prepare(self, create_keyspace=True, nodes=2, rf=2, protocol_version=3, jvm_args=None, random_partitioner=False, **kwargs):
         if jvm_args is None:
             jvm_args = []
 
@@ -75,30 +75,32 @@ class TestCqlTracing(Tester):
         assert 'Request complete ' in out
 
         # Inserts
-        out, err, _ = node1.run_cqlsh(
-            "CONSISTENCY ALL; TRACING ON; "
-            "INSERT INTO ks.users (userid, firstname, lastname, age) "
-            "VALUES (550e8400-e29b-41d4-a716-446655440000, 'Frodo', 'Baggins', 32)")
+        out, err, _ = node1.run_cqlsh(cmds="""
+            CONSISTENCY ALL;
+            TRACING ON;
+            INSERT INTO ks.users (userid, firstname, lastname, age)
+                VALUES (550e8400-e29b-41d4-a716-446655440000, 'Frodo', 'Baggins', 32);""")
+
         logger.debug(out)
         assert 'Tracing session: ' in out
 
         assert node1.address_for_current_version_slashy() in out
         assert self.cluster.nodelist()[1].address_for_current_version_slashy() in out
-        assert self.cluster.nodelist()[2].address_for_current_version_slashy() in out
 
         assert 'Parsing INSERT INTO ks.users ' in out
         assert 'Request complete ' in out
 
         # Queries
-        out, err, _ = node1.run_cqlsh('CONSISTENCY ALL; TRACING ON; '
-                                      'SELECT firstname, lastname '
-                                      'FROM ks.users WHERE userid = 550e8400-e29b-41d4-a716-446655440000')
+        out, err, _ = node1.run_cqlsh(cmds="""
+            CONSISTENCY ALL;
+            TRACING ON;
+            SELECT firstname, lastname FROM ks.users WHERE userid = 550e8400-e29b-41d4-a716-446655440000""")
+
         logger.debug(out)
         assert 'Tracing session: ' in out
 
         assert ' 127.0.0.1 ' in out
         assert ' 127.0.0.2 ' in out
-        assert ' 127.0.0.3 ' in out
         assert 'Request complete ' in out
         assert " Frodo |  Baggins" in out
 
