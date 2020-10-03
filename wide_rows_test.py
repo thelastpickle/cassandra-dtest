@@ -32,7 +32,7 @@ class TestWideRows(Tester):
 
     def write_wide_rows(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -71,7 +71,7 @@ class TestWideRows(Tester):
         returned. See CASSANDRA-5225.
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         (node1,) = cluster.nodelist()
         cluster.set_configuration_options(values={'column_index_size_in_kb': 1})  # reduce this value to force column index creation
         session = self.patient_cql_connection(node1)

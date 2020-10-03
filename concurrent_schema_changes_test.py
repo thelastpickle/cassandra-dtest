@@ -133,7 +133,7 @@ class TestConcurrentSchemaChanges(Tester):
         create tables across multiple threads concurrently
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
@@ -161,7 +161,7 @@ class TestConcurrentSchemaChanges(Tester):
         create alters across multiple threads concurrently
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
@@ -197,7 +197,7 @@ class TestConcurrentSchemaChanges(Tester):
         create indexes across multiple threads concurrently
         """
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
 
         node1, node2 = cluster.nodelist()
         session = self.cql_connection(node1)
@@ -248,7 +248,7 @@ class TestConcurrentSchemaChanges(Tester):
         """
         cluster = self.cluster
         cluster.set_configuration_options({'enable_materialized_views': 'true'})
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
         session.execute("create keyspace lots_o_views WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};")
@@ -325,7 +325,7 @@ class TestConcurrentSchemaChanges(Tester):
         create tables, indexes, alters across multiple threads concurrently
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
         session.execute("create keyspace lots_o_churn WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};")
@@ -341,7 +341,7 @@ class TestConcurrentSchemaChanges(Tester):
         create tables, indexes, alters across multiple threads concurrently with a node down
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
         session.execute("create keyspace lots_o_churn WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};")
@@ -362,7 +362,7 @@ class TestConcurrentSchemaChanges(Tester):
         logger.debug("basic_test()")
 
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1 = cluster.nodelist()[0]
         wait(2)
         session = self.cql_connection(node1)
@@ -374,7 +374,7 @@ class TestConcurrentSchemaChanges(Tester):
     def test_changes_to_different_nodes(self):
         logger.debug("changes_to_different_nodes_test()")
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         wait(2)
         session = self.cql_connection(node1)
@@ -402,7 +402,7 @@ class TestConcurrentSchemaChanges(Tester):
         """
         logger.debug("changes_while_node_down_test()")
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         wait(2)
         session = self.patient_cql_connection(node2)
@@ -429,7 +429,7 @@ class TestConcurrentSchemaChanges(Tester):
         """
         logger.debug("changes_while_node_toggle_test()")
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         wait(2)
         session = self.patient_cql_connection(node2)
@@ -498,7 +498,7 @@ class TestConcurrentSchemaChanges(Tester):
     def test_snapshot(self):
         logger.debug("snapshot_test()")
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         wait(2)
         session = self.cql_connection(node1)
@@ -547,7 +547,7 @@ class TestConcurrentSchemaChanges(Tester):
         logger.debug("load_test()")
 
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         wait(2)
         session = self.cql_connection(node1)

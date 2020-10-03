@@ -271,7 +271,7 @@ class TestSSTableGenerationAndLoading(TestBaseSStableLoader):
         uncompressed.
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         time.sleep(.5)
 
@@ -301,7 +301,7 @@ class TestSSTableGenerationAndLoading(TestBaseSStableLoader):
         @jira_ticket CASSANDRA-343
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         # Makinge sure the cluster is ready to accept the subsequent

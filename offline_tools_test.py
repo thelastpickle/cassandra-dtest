@@ -34,7 +34,7 @@ class TestOfflineTools(Tester):
         @jira_ticket CASSANDRA-7614
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         # test by trying to run on nonexistent keyspace
@@ -116,7 +116,7 @@ class TestOfflineTools(Tester):
         """
         cluster = self.cluster
         cluster.set_configuration_options(values={'compaction_throughput_mb_per_sec': 0})
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         # NOTE - As of now this does not return when it encounters Exception and causes test to hang, temporarily commented out
@@ -221,7 +221,7 @@ class TestOfflineTools(Tester):
         Test on potential situations: deleted sstables, corrupted sstables
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         # test on nonexistent keyspace
@@ -298,7 +298,7 @@ class TestOfflineTools(Tester):
 
     def test_sstableexpiredblockers(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'ks', 1)
@@ -351,7 +351,7 @@ class TestOfflineTools(Tester):
             cluster.set_install_dir(version='github:apache/cassandra-3.0')
 
         # Start up last major version, write out an sstable to upgrade, and stop node
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         # Check that node1 is actually what we expect
         logger.debug('Downgraded install dir: {}'.format(node1.get_install_dir()))
@@ -402,7 +402,7 @@ class TestOfflineTools(Tester):
         cluster = self.cluster
         # disable JBOD conf since the test expects exactly one SSTable to be written.
         cluster.set_datadir_count(1)
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'ks', 1)

@@ -30,7 +30,7 @@ class TestSCCache(Tester):
         """ Test for bug reported in #4190 """
         cluster = self.cluster
 
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         self.patient_cql_connection(node1)
 

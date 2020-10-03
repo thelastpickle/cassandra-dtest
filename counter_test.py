@@ -130,7 +130,7 @@ class TestCounters(Tester):
         """ Simple incrementation test (Created for #3465, that wasn't a bug) """
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         nodes = cluster.nodelist()
 
         session = self.patient_cql_connection(nodes[0])
@@ -161,7 +161,7 @@ class TestCounters(Tester):
         """ Test for bug of #4436 """
         cluster = self.cluster
 
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         nodes = cluster.nodelist()
 
         session = self.patient_cql_connection(nodes[0])
@@ -227,7 +227,7 @@ class TestCounters(Tester):
         Do a bunch of writes with ONE, read back with ALL and check results.
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'counter_tests', 3)
@@ -308,7 +308,7 @@ class TestCounters(Tester):
         Test for singlular update statements that will affect multiple counters.
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'counter_tests', 3)
@@ -346,7 +346,7 @@ class TestCounters(Tester):
     @since("2.0", max_version="3.X")
     def test_validate_empty_column_name(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1)
         create_ks(session, 'counter_tests', 1)
@@ -372,7 +372,7 @@ class TestCounters(Tester):
     def test_drop_counter_column(self):
         """Test for CASSANDRA-7831"""
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'counter_tests', 1)
@@ -396,7 +396,7 @@ class TestCounters(Tester):
         This test will fail on 3.0.0 - 3.0.8, and 3.1 - 3.8
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1)
         create_ks(session, 'counter_tests', 1)

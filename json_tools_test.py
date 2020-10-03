@@ -19,7 +19,7 @@ class TestJson(Tester):
         logger.debug("Starting cluster...")
         cluster = self.cluster
         cluster.set_batch_commitlog(enabled=True)
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         logger.debug("Version: " + cluster.version().vstring)
 

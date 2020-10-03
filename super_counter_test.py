@@ -31,7 +31,7 @@ class TestSuperCounterClusterRestart(Tester):
         NUM_ADDS = 100
 
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
 
         time.sleep(.5)

@@ -40,7 +40,7 @@ class TestSecondaryIndexes(Tester):
         @jira_ticket CASSANDRA-3367
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -74,7 +74,7 @@ class TestSecondaryIndexes(Tester):
         concurrently
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -145,7 +145,7 @@ class TestSecondaryIndexes(Tester):
         """
         # Reproducing requires at least 3 nodes:
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1)
 
@@ -189,7 +189,7 @@ class TestSecondaryIndexes(Tester):
         """
         # Reproducing requires at least 3 nodes:
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1)
 
@@ -225,7 +225,7 @@ class TestSecondaryIndexes(Tester):
         column is > 64k
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1)
 
@@ -249,7 +249,7 @@ class TestSecondaryIndexes(Tester):
     @since("2.0", max_version="3.X")
     def test_8280_validate_indexed_values_compact(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1)
 
@@ -299,7 +299,7 @@ class TestSecondaryIndexes(Tester):
         asserts that new sstables are written when rebuild_index is called from nodetool
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
 
@@ -420,7 +420,7 @@ class TestSecondaryIndexes(Tester):
         asserts that indexes deleted before they have been completely build are invalidated and not built after restart
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node = cluster.nodelist()[0]
         session = self.patient_cql_connection(node)
 
@@ -461,7 +461,7 @@ class TestSecondaryIndexes(Tester):
         """
 
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node)
@@ -494,7 +494,7 @@ class TestSecondaryIndexes(Tester):
         asserts that having multiple indexes that cover all predicates still requires ALLOW FILTERING to also be present
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         session.execute("CREATE KEYSPACE ks WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': '1'};")
@@ -527,7 +527,7 @@ class TestSecondaryIndexes(Tester):
         @jira_ticket CASSANDRA-10215
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_exclusive_cql_connection(node3)
         session.max_trace_wait = 120
@@ -606,7 +606,7 @@ class TestSecondaryIndexes(Tester):
         @jira_ticket CASSANDRA-11104
         """
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         session.execute("CREATE KEYSPACE ks WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': '1'};")
@@ -639,7 +639,7 @@ class TestSecondaryIndexesOnCollections(Tester):
         Checks that secondary indexes on tuples work for querying
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'tuple_index_test', 1)
@@ -726,7 +726,7 @@ class TestSecondaryIndexesOnCollections(Tester):
         Checks that secondary indexes on lists work for querying.
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'list_index_search', 1)
@@ -816,7 +816,7 @@ class TestSecondaryIndexesOnCollections(Tester):
         Checks that secondary indexes on sets work for querying.
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'set_index_search', 1)
@@ -906,7 +906,7 @@ class TestSecondaryIndexesOnCollections(Tester):
         @since 3.0
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'map_double_index', 1)
@@ -957,7 +957,7 @@ class TestSecondaryIndexesOnCollections(Tester):
         Checks that secondary indexes on maps work for querying on both keys and values
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'map_index_search', 1)
@@ -1103,7 +1103,7 @@ class TestUpgradeSecondaryIndexes(Tester):
         cluster.set_install_dir(version="2.0.12")
         if "memtable_allocation_type" in cluster._config_options:
             cluster._config_options.__delitem__("memtable_allocation_type")
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)

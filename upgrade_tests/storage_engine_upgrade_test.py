@@ -43,7 +43,7 @@ class TestStorageEngineUpgrade(Tester):
         else:
             cluster.set_install_dir(version="git:cassandra-2.1")
         self.fixture_dtest_setup.reinitialize_cluster_for_different_version()
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         node1 = cluster.nodelist()[0]
 

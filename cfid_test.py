@@ -14,7 +14,7 @@ class TestCFID(Tester):
         """
         cluster = self.cluster
 
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)

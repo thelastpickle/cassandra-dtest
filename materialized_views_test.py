@@ -2324,7 +2324,7 @@ class TestMaterializedViews(Tester):
         """
         cluster = self.cluster
         cluster.set_configuration_options({'enable_materialized_views': 'true'})
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.QUORUM)
 
@@ -2681,7 +2681,7 @@ class TestMaterializedViewsConsistency(Tester):
     def prepare(self, user_table=False):
         cluster = self.cluster
         cluster.set_configuration_options({'enable_materialized_views': 'true'})
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node2 = cluster.nodelist()[1]
 
         # Keep the status of async requests

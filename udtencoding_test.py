@@ -13,7 +13,7 @@ class TestUDTEncoding(Tester):
         """ Test (somewhat indirectly) that user queries involving UDT's are properly encoded (due to driver not recognizing UDT syntax) """
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         time.sleep(.5)

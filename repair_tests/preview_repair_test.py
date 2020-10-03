@@ -23,7 +23,7 @@ class TestPreviewRepair(Tester):
         """ Test that preview correctly detects out of sync data """
         cluster = self.cluster
         cluster.set_configuration_options(values={'hinted_handoff_enabled': False, 'commitlog_sync_period_in_ms': 500})
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_exclusive_cql_connection(node3)

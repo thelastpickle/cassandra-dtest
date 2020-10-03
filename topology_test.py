@@ -161,7 +161,7 @@ class TestTopology(Tester):
         """
         cluster = self.cluster
         cluster.set_configuration_options(values={'stream_throughput_outbound_megabits_per_sec': 1})
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
 
         session = self.patient_cql_connection(node2)
@@ -381,7 +381,7 @@ class TestTopology(Tester):
         self.fixture_dtest_setup.ignore_log_patterns = list(self.fixture_dtest_setup.ignore_log_patterns) + [
             rejoin_err]
 
-        self.cluster.populate(3).start()
+        self.bootstrap_start_cluster(self.cluster.populate(3))
         node1, node2, node3 = self.cluster.nodelist()
 
         logger.debug('decommissioning...')
@@ -420,7 +420,7 @@ class TestTopology(Tester):
         """
         cluster = self.cluster
         self.fixture_dtest_setup.ignore_log_patterns = [r'Streaming error occurred', 'Stream failed']
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         node1, node2 = cluster.nodelist()[0:2]
 

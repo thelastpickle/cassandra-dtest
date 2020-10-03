@@ -30,7 +30,7 @@ class BasePagingTester(Tester):
         supports_v5 = self.supports_v5_protocol(self.cluster.version())
         protocol_version = 5 if supports_v5 else None
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1,
                                               protocol_version=protocol_version,
@@ -3013,7 +3013,7 @@ class TestPagingDatasetChanges(BasePagingTester, PageAssertionMixin):
 
     def test_node_unavailabe_during_paging(self):
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1)
         create_ks(session, 'test_paging_size', 1)

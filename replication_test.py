@@ -204,7 +204,7 @@ class TestReplication(Tester):
         """
         Test the SimpleStrategy on a 3 node cluster
         """
-        self.cluster.populate(3).start()
+        self.bootstrap_start_cluster(self.cluster.populate(3))
         node1 = self.cluster.nodelist()[0]
         session = self.patient_exclusive_cql_connection(node1, consistency_level=ConsistencyLevel.ALL)
         session.max_trace_wait = 120

@@ -33,7 +33,7 @@ class TestInternodeSSL(Tester):
         cluster.set_configuration_options({'internode_compression': internode_compression})
         cluster.enable_internode_ssl(self.fixture_dtest_setup.test_path)
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         session = self.patient_cql_connection(cluster.nodelist()[0])
         create_ks(session, 'ks', 3)

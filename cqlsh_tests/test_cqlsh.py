@@ -635,7 +635,7 @@ VALUES (4, blobAsInt(0x), '', blobAsBigint(0x), 0x, blobAsBoolean(0x), blobAsDec
         assert expected in output, "Output \n {0} \n doesn't contain expected\n {1}".format(output, expected)
 
     def test_tracing_from_system_traces(self):
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
 
         node1, = self.cluster.nodelist()
 
@@ -656,7 +656,7 @@ VALUES (4, blobAsInt(0x), '', blobAsBigint(0x), 0x, blobAsBoolean(0x), blobAsDec
         assert 'Tracing session: ' not in out
 
     def test_select_element_inside_udt(self):
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
 
         node1, = self.cluster.nodelist()
         session = self.patient_cql_connection(node1)
@@ -1411,7 +1411,7 @@ CREATE TYPE test.address_type (
         return describe_statement
 
     def test_copy_to(self):
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
         node1, = self.cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -2124,7 +2124,7 @@ class TestCqlshSmoke(Tester, CqlshMixin):
 
     @pytest.fixture(scope='function', autouse=True)
     def fixture_cluster_setup(self, fixture_dtest_setup):
-        fixture_dtest_setup.cluster.populate(1).start()
+        fixture_dtest_setup.self.bootstrap_start_cluster(cluster.populate(1))
         [self.node1] = fixture_dtest_setup.cluster.nodelist()
         self.session = fixture_dtest_setup.patient_cql_connection(self.node1)
 
@@ -2428,7 +2428,7 @@ class TestCqlLogin(Tester, CqlshMixin):
         cluster = fixture_dtest_setup.cluster
         config = {'authenticator': 'org.apache.cassandra.auth.PasswordAuthenticator'}
         cluster.set_configuration_options(values=config)
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [self.node1] = cluster.nodelist()
         self.node1.watch_log_for('Created default superuser')
         self.session = fixture_dtest_setup.patient_cql_connection(self.node1, user='cassandra', password='cassandra')
@@ -2544,7 +2544,7 @@ class TestCqlshUnicode(Tester, CqlshMixin):
     @pytest.fixture(scope='function', autouse=True)
     def fixture_cluster_setup(self, fixture_dtest_setup):
         cluster = fixture_dtest_setup.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [self.node1] = cluster.nodelist()
         self.session = fixture_dtest_setup.patient_cql_connection(self.node1)
 

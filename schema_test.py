@@ -18,7 +18,7 @@ class TestSchema(Tester):
         Tests that table alters return as expected with many sstables at different schema points
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'ks', 1)
@@ -185,7 +185,7 @@ class TestSchema(Tester):
         @jira_ticket CASSANDRA-14905
         """
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1, node2 = cluster.nodelist()
         session = self.patient_exclusive_cql_connection(node1)
         create_ks(session, 'ks1', 2)
@@ -219,7 +219,7 @@ class TestSchema(Tester):
         @jira_ticket CASSANDRA-14905
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node = cluster.nodelist()[0]
         session = self.patient_cql_connection(node)
         session.execute("USE system;")
@@ -235,7 +235,7 @@ class TestSchema(Tester):
 
     def prepare(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         time.sleep(.5)
         nodes = cluster.nodelist()
         session = self.patient_cql_connection(nodes[0])

@@ -58,7 +58,7 @@ class TestAuthUpgrade(Tester):
 
         # Forcing cluster version on purpose
         cluster.set_install_dir(version="2.1.16")
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         node1, node2, node3 = cluster.nodelist()
 
@@ -119,7 +119,7 @@ class TestAuthUpgrade(Tester):
 
         # Forcing cluster version on purpose
         cluster.set_install_dir(version="github:apache/cassandra-2.1")
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
 
         node1, node2, node3 = cluster.nodelist()
 

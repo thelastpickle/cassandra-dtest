@@ -224,7 +224,7 @@ class TestScrubIndexes(TestHelper):
 
     def test_scrub_static_table(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -263,7 +263,7 @@ class TestScrubIndexes(TestHelper):
 
     def test_standalone_scrub(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -290,7 +290,7 @@ class TestScrubIndexes(TestHelper):
 
     def test_scrub_collections_table(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -358,7 +358,7 @@ class TestScrub(TestHelper):
 
     def test_nodetool_scrub(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         # we don't want automatic minor compaction because we want to block on
         # compactions
@@ -400,7 +400,7 @@ class TestScrub(TestHelper):
 
     def test_standalone_scrub(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -427,7 +427,7 @@ class TestScrub(TestHelper):
 
     def test_standalone_scrub_essential_files_only(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)
@@ -459,7 +459,7 @@ class TestScrub(TestHelper):
         @jira_ticket CASSANDRA-7665
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
 
         session = self.patient_cql_connection(node1)

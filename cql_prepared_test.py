@@ -14,7 +14,7 @@ class TestCQL(Tester):
     def prepare(self):
         cluster = self.cluster
 
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         time.sleep(0.2)
 

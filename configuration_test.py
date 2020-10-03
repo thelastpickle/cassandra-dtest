@@ -27,7 +27,7 @@ class TestConfiguration(Tester):
         """ Verify the setting of compression chunk_length [#3558]"""
         cluster = self.cluster
 
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node = cluster.nodelist()[0]
         session = self.patient_cql_connection(node)
         create_ks(session, 'ks', 1)

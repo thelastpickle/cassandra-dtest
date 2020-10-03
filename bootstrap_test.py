@@ -384,7 +384,7 @@ class TestBootstrap(Tester):
         """Test bootstrap with resetting bootstrap progress"""
         cluster = self.cluster
         cluster.set_configuration_options(values={'stream_throughput_outbound_megabits_per_sec': 1})
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
 
         node1 = cluster.nodes['node1']
         node1.stress(['write', 'n=100K', '-schema', 'replication(factor=2)'])
@@ -422,7 +422,7 @@ class TestBootstrap(Tester):
             @jira_ticket CASSANDRA-9022
         """
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         (node1, node2) = cluster.nodelist()
 
         node1.stress(['write', 'n=1K', 'no-warmup', '-schema', 'replication(factor=2)',

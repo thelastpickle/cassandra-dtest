@@ -48,7 +48,7 @@ class TestUserFunctions(Tester):
         cluster = self.cluster
 
         # Uses 3 nodes just to make sure function mutations are correctly serialized
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
         node2 = cluster.nodelist()[1]
         node3 = cluster.nodelist()[2]

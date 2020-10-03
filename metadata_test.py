@@ -38,7 +38,7 @@ class TestMetadata(Tester):
         self.fixture_dtest_setup.ignore_log_patterns = ['.*Unknown keyspace/cf pair.*']
 
         cluster = self.cluster
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         (node1, node2) = cluster.nodelist()
 
         node1.nodetool("disableautocompaction")

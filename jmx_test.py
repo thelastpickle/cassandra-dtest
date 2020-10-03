@@ -33,7 +33,7 @@ class TestJMX(Tester):
         """
         #
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         node1.stress(['write', 'n=500K', 'no-warmup', '-schema', 'replication(factor=3)'])
@@ -244,7 +244,7 @@ class TestJMX(Tester):
         @jira_ticket CASSANDRA-9526
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         stdout = node1.nodetool("failuredetector").stdout

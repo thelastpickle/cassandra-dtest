@@ -23,7 +23,7 @@ class TestPendingRangeMovements(Tester):
             cluster.set_log_level('DEBUG')
 
         # Create 5 node cluster
-        cluster.populate(5).start()
+        self.bootstrap_start_cluster(cluster.populate(5))
         node1, node2 = cluster.nodelist()[0:2]
 
         # Set up RF=3 keyspace

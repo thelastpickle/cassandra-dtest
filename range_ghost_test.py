@@ -12,7 +12,7 @@ class TestRangeGhosts(Tester):
     def test_ghosts(self):
         """ Check range ghost are correctly removed by the system """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
 
         time.sleep(.5)

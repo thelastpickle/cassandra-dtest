@@ -42,7 +42,7 @@ class TestPutGet(Tester):
     def _putget(self, compression=None):
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -55,7 +55,7 @@ class TestPutGet(Tester):
         """ This test reads from a coordinator we know has no copy of the data """
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -71,7 +71,7 @@ class TestPutGet(Tester):
         """ Simple put/get on ranges of rows, hitting multiple sstables """
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -84,7 +84,7 @@ class TestPutGet(Tester):
         """ Test wide row slices """
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)

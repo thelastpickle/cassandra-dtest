@@ -508,7 +508,7 @@ class TestSchemaMetadata(Tester):
                                                'enable_scripted_user_defined_functions': 'true'})
         elif cluster.version() >= '2.2':
             cluster.set_configuration_options({'enable_user_defined_functions': 'true'})
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         self.session = fixture_dtest_setup.patient_cql_connection(cluster.nodelist()[0])
         create_ks(self.session, 'ks', 1)

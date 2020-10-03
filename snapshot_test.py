@@ -88,7 +88,7 @@ class TestSnapshot(SnapshotTester):
 
     def test_basic_snapshot_and_restore(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         (node1,) = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         self.create_schema(session)
@@ -127,7 +127,7 @@ class TestSnapshot(SnapshotTester):
         Dropping table should clear entries in dropped_column table
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
 
@@ -161,7 +161,7 @@ class TestSnapshot(SnapshotTester):
         Can't load snapshots of tables with dropped columns.
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1, = cluster.nodelist()
         session = self.patient_cql_connection(node1)
 

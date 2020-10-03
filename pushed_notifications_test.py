@@ -93,7 +93,7 @@ class TestPushedNotifications(Tester):
         @jira_ticket CASSANDRA-8516
         Moving a token should result in MOVED_NODE notifications.
         """
-        self.cluster.populate(3).start()
+        self.bootstrap_start_cluster(self.cluster.populate(3))
 
         waiters = [NotificationWaiter(self, node, ["TOPOLOGY_CHANGE"])
                    for node in list(self.cluster.nodes.values())]
@@ -173,7 +173,7 @@ class TestPushedNotifications(Tester):
         @jira_ticket CASSANDRA-7816
         Restarting a node should generate exactly one DOWN and one UP notification
         """
-        self.cluster.populate(2).start()
+        self.bootstrap_start_cluster(self.cluster.populate(2))
         node1, node2 = self.cluster.nodelist()
 
         waiter = NotificationWaiter(self, node1, ["STATUS_CHANGE", "TOPOLOGY_CHANGE"])
@@ -260,7 +260,7 @@ class TestPushedNotifications(Tester):
         Test that NEW_NODE and REMOVED_NODE are sent correctly as nodes join and leave.
         @jira_ticket CASSANDRA-11038
         """
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
         node1 = self.cluster.nodelist()[0]
 
         waiter = NotificationWaiter(self, node1, ["STATUS_CHANGE", "TOPOLOGY_CHANGE"])
@@ -325,7 +325,7 @@ class TestPushedNotifications(Tester):
         will generate the correct schema change notifications.
         """
         self.cluster.set_configuration_options({'enable_materialized_views': 'true'})
-        self.cluster.populate(2).start()
+        self.bootstrap_start_cluster(self.cluster.populate(2))
         node1, node2 = self.cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -395,7 +395,7 @@ class TestVariousNotifications(Tester):
                 'range_request_timeout_in_ms': 40000
             }
         )
-        self.cluster.populate(3).start()
+        self.bootstrap_start_cluster(self.cluster.populate(3))
         node1, node2, node3 = self.cluster.nodelist()
         proto_version = 5 if have_v5_protocol else None
         session = self.patient_cql_connection(node1, protocol_version=proto_version)

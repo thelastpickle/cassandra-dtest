@@ -43,7 +43,7 @@ class TestUserTypes(Tester):
         Tests that a type cannot be dropped when in use, and otherwise can be dropped.
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_type_dropping', 2)
@@ -105,7 +105,7 @@ class TestUserTypes(Tester):
         Confirm a user type can't be dropped when being used by another user type.
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'nested_user_type_dropping', 2)
@@ -154,7 +154,7 @@ class TestUserTypes(Tester):
         Confirm error when incorrect data type used for user type
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_type_enforcement', 2)
@@ -202,7 +202,7 @@ class TestUserTypes(Tester):
     def test_nested_user_types(self):
         """Tests user types within user types"""
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_types', 2)
@@ -337,7 +337,7 @@ class TestUserTypes(Tester):
         # make sure we can define a table with a user type as part of the pkey
         # and do a basic insert/query of data in that table.
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_type_pkeys', 2)
@@ -399,7 +399,7 @@ class TestUserTypes(Tester):
         Similar procedure to TestSecondaryIndexesOnCollections.test_list_indexes
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_type_indexing', 2)
@@ -527,7 +527,7 @@ class TestUserTypes(Tester):
                   'authorizer': 'org.apache.cassandra.auth.CassandraAuthorizer',
                   'permissions_validity_in_ms': 0}
         cluster.set_configuration_options(values=config)
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         # need a bit of time for user to be created and propagate
         time.sleep(5)
@@ -581,7 +581,7 @@ class TestUserTypes(Tester):
     def test_nulls_in_user_types(self):
         """Tests user types with null values"""
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_types', 2)
@@ -625,7 +625,7 @@ class TestUserTypes(Tester):
     def test_no_counters_in_user_types(self):
         # CASSANDRA-7672
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
         session = self.patient_cql_connection(node1)
         create_ks(session, 'user_types', 1)
@@ -647,7 +647,7 @@ class TestUserTypes(Tester):
         # make sure we can define a table with a user type as a clustering column
         # and do a basic insert/query of data in that table.
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_type_pkeys', 2)
@@ -695,7 +695,7 @@ class TestUserTypes(Tester):
         @since 3.6
         """
         cluster = self.cluster
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
         session = self.patient_cql_connection(node1, consistency_level=ConsistencyLevel.LOCAL_QUORUM)
         create_ks(session, 'user_types', 1)
@@ -770,7 +770,7 @@ class TestUserTypes(Tester):
         @since 2.2
         """
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         node1 = cluster.nodelist()[0]
         session = self.patient_cql_connection(node1)
         create_ks(session, 'user_types', 1)

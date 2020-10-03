@@ -18,7 +18,7 @@ class TestPreparedStatements(Tester):
         """
         Prepared statements using dropped indexes should be handled correctly
         """
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
         node = list(self.cluster.nodes.values())[0]
 
         session = self.patient_cql_connection(node)

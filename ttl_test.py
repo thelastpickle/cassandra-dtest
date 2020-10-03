@@ -29,7 +29,7 @@ class TestTTL(Tester):
     def fixture_ttl_test_setup(self, fixture_dtest_setup):
         self.cluster = fixture_dtest_setup.cluster
         self.fixture_dtest_setup = fixture_dtest_setup
-        self.cluster.populate(1).start()
+        self.bootstrap_start_cluster(self.cluster.populate(1))
         [node1] = self.cluster.nodelist()
         self.session1 = self.patient_cql_connection(node1)
         create_ks(self.session1, 'ks', 1)
@@ -415,7 +415,7 @@ class TestDistributedTTL(Tester):
 
     @pytest.fixture(scope='function', autouse=True)
     def fixture_set_cluster_settings(self, fixture_dtest_setup):
-        fixture_dtest_setup.cluster.populate(2).start()
+        fixture_dtest_setup.self.bootstrap_start_cluster(cluster.populate(2))
         [self.node1, self.node2] = fixture_dtest_setup.cluster.nodelist()
         self.session1 = fixture_dtest_setup.patient_cql_connection(self.node1)
         create_ks(self.session1, 'ks', 2)
@@ -569,7 +569,7 @@ class TestRecoverNegativeExpirationDate(TestHelper):
         cluster = self.cluster
         if self.cluster.version() >= '4':
             cluster.set_configuration_options(values={'corrupted_tombstone_strategy': 'disabled'})
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node] = cluster.nodelist()
 
         session = self.patient_cql_connection(node)

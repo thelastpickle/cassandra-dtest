@@ -35,7 +35,7 @@ def build_doc_context(tester, test_name, prepare=True, connection=None, nodes=No
         if connection or nodes:
             raise RuntimeError("Cannot auto prepare doctest context when connection or nodes are provided.")
 
-        tester.cluster.populate(1).start()
+        tester.self.bootstrap_start_cluster(cluster.populate(1))
         nodes = tester.cluster.nodelist()
         connection = tester.patient_cql_connection(nodes[0])
         connection.execute("CREATE KEYSPACE {} WITH REPLICATION = {{'class': 'SimpleStrategy', 'replication_factor': 1}};".format(default_ks_name))

@@ -15,7 +15,7 @@ class TestSystemKeyspaces(Tester):
     @since('3.0')
     def test_local_system_keyspaces(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         node = cluster.nodelist()[0]
         session = self.patient_cql_connection(node)
@@ -60,7 +60,7 @@ class TestSystemKeyspaces(Tester):
     @since('3.0')
     def test_replicated_system_keyspaces(self):
         cluster = self.cluster
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
 
         node = cluster.nodelist()[0]
         session = self.patient_cql_connection(node)

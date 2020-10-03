@@ -36,7 +36,7 @@ class TestDiskBalance(Tester):
         cluster = self.cluster
         if self.dtest_config.use_vnodes:
             cluster.set_configuration_options(values={'num_tokens': 256})
-        cluster.populate(4).start()
+        self.bootstrap_start_cluster(cluster.populate(4))
         node1 = cluster.nodes['node1']
 
         node1.stress(['write', 'n=50k', 'no-warmup', '-rate', 'threads=100', '-schema', 'replication(factor=3)',
@@ -53,7 +53,7 @@ class TestDiskBalance(Tester):
             cluster.set_configuration_options(values={'num_tokens': 256})
         # apparently we have legitimate errors in the log when bootstrapping (see bootstrap_test.py)
         self.fixture_dtest_setup.allow_log_errors = True
-        cluster.populate(4).start()
+        self.bootstrap_start_cluster(cluster.populate(4))
         node1 = cluster.nodes['node1']
 
         node1.stress(['write', 'n=50k', 'no-warmup', '-rate', 'threads=100', '-schema', 'replication(factor=3)',
@@ -76,7 +76,7 @@ class TestDiskBalance(Tester):
             cluster.set_configuration_options(values={'num_tokens': 256})
         # apparently we have legitimate errors in the log when bootstrapping (see bootstrap_test.py)
         self.fixture_dtest_setup.allow_log_errors = True
-        cluster.populate(4).start()
+        self.bootstrap_start_cluster(cluster.populate(4))
         node1 = cluster.nodes['node1']
 
         logger.debug("Populating")
@@ -106,7 +106,7 @@ class TestDiskBalance(Tester):
         cluster = self.cluster
         if self.dtest_config.use_vnodes:
             cluster.set_configuration_options(values={'num_tokens': 256})
-        cluster.populate(4).start()
+        self.bootstrap_start_cluster(cluster.populate(4))
         node1 = cluster.nodes['node1']
         node4 = cluster.nodes['node4']
         node1.stress(['write', 'n=50k', 'no-warmup', '-rate', 'threads=100', '-schema', 'replication(factor=2)',
@@ -153,7 +153,7 @@ class TestDiskBalance(Tester):
         cluster = self.cluster
         if self.dtest_config.use_vnodes:
             cluster.set_configuration_options(values={'num_tokens': 256})
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodes['node1']
         node1.stress(['write', 'n=1', 'no-warmup', '-rate', 'threads=100', '-schema', 'replication(factor=1)'])
         cluster.flush()
@@ -206,7 +206,7 @@ class TestDiskBalance(Tester):
         cluster.set_configuration_options(values={'concurrent_compactors': num_disks})
 
         logger.debug("Starting node1 with {} data dirs and concurrent_compactors".format(num_disks))
-        cluster.populate(1).start()
+        self.bootstrap_start_cluster(cluster.populate(1))
         [node1] = cluster.nodelist()
 
         session = self.patient_cql_connection(node1)
@@ -279,7 +279,7 @@ class TestDiskBalance(Tester):
         cluster.set_configuration_options(values={'concurrent_compactors': num_disks})
 
         logger.debug("Starting 3 nodes with {} data dirs and concurrent_compactors".format(num_disks))
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1 = cluster.nodelist()[0]
 
         num_flushes = 10

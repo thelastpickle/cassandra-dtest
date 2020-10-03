@@ -677,7 +677,7 @@ class TestMiscellaneousCQL(CQLTester):
 
         cluster = self.cluster
 
-        cluster.populate(2).start()
+        self.bootstrap_start_cluster(cluster.populate(2))
         node1 = cluster.nodelist()[0]
         time.sleep(0.2)
 
@@ -732,7 +732,7 @@ class TestMiscellaneousCQL(CQLTester):
 
         cluster = self.cluster
 
-        cluster.populate(3).start()
+        self.bootstrap_start_cluster(cluster.populate(3))
         node1, node2, node3 = cluster.nodelist()
 
         session1 = self.patient_cql_connection(node1)
