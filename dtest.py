@@ -285,20 +285,23 @@ class Tester(object):
          Don't return until all nodes are UP.
         """
         # bootstrap nodes sequentially
+        joined = []
         for node in list(cluster.nodes.values()):
-            mark = 0
-            if os.path.exists(node.logfilename()):
-                mark = node.mark_log()
-            p = node.start(no_wait=True, wait_other_notice=False)
-            try:
+            if not node.is_running():
+                mark = 0
+                if os.path.exists(node.logfilename()):
+                    mark = node.mark_log()
+                p = node.start(no_wait=True, wait_other_notice=False)
+                #try:
                 start_message = "JOINING: Finish joining ring"
                 node.watch_log_for(start_message, timeout=kwargs.get('timeout',60), process=p, from_mark=mark)
-            except RuntimeError:
-                return None
+                #except RuntimeError:
+                #    return None
+                joined.append((node, p, mark))
 
-        for node in list(cluster.nodes.values()):
-            while not node.is_running():
-                time.sleep(.2)
+        for node, p, mark in joined:
+            start_message = "Listening for thrift clients..." if cluster.cassandra_version() < "2.2" else "Starting listening for CQL clients"
+            node.watch_log_for(start_message, timeout=kwargs.get('timeout',60), process=p, from_mark=mark)
 
         return cluster
 
