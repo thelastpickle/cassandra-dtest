@@ -251,21 +251,22 @@ def copy_logs(request, cluster, directory=None, name=None):
 
     any_file = False
     for node in cluster.nodes.values():
-        nodelogdir = node.log_directory()
-        for f in os.listdir(nodelogdir):
-            file = os.path.join(nodelogdir, f)
-            if os.path.isfile(file):
-                if not any_file:
-                    os.mkdir(logdir)
-                    any_file = True
+        if hasattr(node, 'log_directory'):
+            nodelogdir = node.log_directory()
+            for f in os.listdir(nodelogdir):
+                file = os.path.join(nodelogdir, f)
+                if os.path.isfile(file):
+                    if not any_file:
+                        os.mkdir(logdir)
+                        any_file = True
 
-                if f == 'system.log':
-                    target_name = node.name + '.log'
-                elif f == 'gc.log.0.current':
-                    target_name = node.name + '_gc.log'
-                else:
-                    target_name = node.name + '_' + f
-                shutil.copyfile(file, os.path.join(logdir, target_name))
+                    if f == 'system.log':
+                        target_name = node.name + '.log'
+                    elif f == 'gc.log.0.current':
+                        target_name = node.name + '_gc.log'
+                    else:
+                        target_name = node.name + '_' + f
+                    shutil.copyfile(file, os.path.join(logdir, target_name))
 
     if any_file:
         if os.path.exists(name):

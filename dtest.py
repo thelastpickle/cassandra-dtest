@@ -1,10 +1,15 @@
 import configparser
 import copy
+import fileinput
+import hashlib
 import logging
 import os
+import pprint
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 import traceback
@@ -21,6 +26,7 @@ from cassandra import ConsistencyLevel, OperationTimedOut
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import ExecutionProfile
 from cassandra.policies import RetryPolicy, RoundRobinPolicy
+from ccmlib.cluster import Cluster
 from ccmlib.node import ToolError, TimeoutError
 from tools.misc import retry_till_success
 
@@ -269,6 +275,32 @@ class Tester(object):
             node.watch_log_for(msg, timeout=timeout, **kwargs)
         except TimeoutError:
             pytest.fail("Log message was not seen within timeout:\n{0}".format(msg))
+
+
+    def bootstrap_start_cluster(self, cluster, **kwargs):
+        """
+        Faster version of `self.bootstrap_start_cluster(cluster)`
+         with the knowledge that clusters are always new and need to bootstrap.
+        Manually start nodes in sequence, but only wait for them to join ring before starting next.
+         Don't return until all nodes are UP.
+        """
+        # bootstrap nodes sequentially
+        for node in list(cluster.nodes.values()):
+            mark = 0
+            if os.path.exists(node.logfilename()):
+                mark = node.mark_log()
+            p = node.start(no_wait=True, wait_other_notice=False)
+            try:
+                start_message = "JOINING: Finish joining ring"
+                node.watch_log_for(start_message, timeout=kwargs.get('timeout',60), process=p, from_mark=mark)
+            except RuntimeError:
+                return None
+
+        for node in list(cluster.nodes.values()):
+            while not node.is_running():
+                time.sleep(.2)
+
+        return cluster
 
 
 def get_eager_protocol_version(cassandra_version):
