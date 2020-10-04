@@ -1,10 +1,15 @@
 import configparser
 import copy
+import fileinput
+import hashlib
 import logging
 import os
+import pprint
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 import traceback
@@ -21,6 +26,7 @@ from cassandra import ConsistencyLevel, OperationTimedOut
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import ExecutionProfile
 from cassandra.policies import RetryPolicy, RoundRobinPolicy
+from ccmlib.cluster import Cluster
 from ccmlib.node import ToolError, TimeoutError
 from tools.misc import retry_till_success
 
@@ -270,6 +276,61 @@ class Tester(object):
         except TimeoutError:
             pytest.fail("Log message was not seen within timeout:\n{0}".format(msg))
 
+    def start_cluster(self, cluster, **kwargs):
+        # everything that parameterises the cached ccm is put into c
+        c = vars(cluster).copy()
+        c.pop('_Cluster__path', None)
+        c['dcs'] = set()
+        for node in c['nodes']:
+            c['dcs'].add(c['nodes'][node].data_center)
+        c['dcs'] = len(c['dcs'])
+        c['nodes'] = len(c['nodes'])
+        c['seeds'] = len(c['seeds'])
+        # todo add get_sha
+
+        #logger.debug("cluster hash: %s", pprint.pformat(c))
+        cluster_hash = hashlib.sha256(pprint.pformat(c).encode('utf-8')).hexdigest()
+        cached_bootstrapped_ccm = os.path.join(tempfile.tempdir, "dtest-template-" + cluster_hash)
+        if os.path.exists(cached_bootstrapped_ccm):
+            logging.info("reusing bootstrapped ccm: %s", cluster_hash)
+            shutil.rmtree(cluster._Cluster__path)
+            copy_ccm(cached_bootstrapped_ccm, cluster._Cluster__path)
+        else:
+            logging.info("bootstrapping new ccm: %s", cluster_hash)
+            # inside cluster.start(…) the nodes are started and bootstrapped sequentially
+            cluster.start(wait_for_binary_proto=False, wait_other_notice=False)
+            cluster.stop()
+            copy_ccm(cluster._Cluster__path, cached_bootstrapped_ccm)
+
+        # bootstrapped nodes can be started in parallel
+        started = []
+        for node in list(cluster.nodes.values()):
+            mark = 0
+            if os.path.exists(node.logfilename()):
+                mark = node.mark_log()
+            p = node.start(no_wait=True, wait_other_notice=False)
+            started.append((node, p, mark))
+
+        for node in list(cluster.nodes.values()):
+            for node, p, mark in started:
+                try:
+                    start_message = "Listening for thrift clients..." if cluster.cassandra_version() < "2.2" else "Starting listening for CQL clients"
+                    node.watch_log_for(start_message, timeout=kwargs.get('timeout',60), process=p, from_mark=mark)
+                except RuntimeError:
+                    return None
+
+        return self.cluster
+
+
+
+def copy_ccm(source, dest):
+    shutil.copytree(source, dest)
+    for directory, subdirectories, files in os.walk(dest):
+        if directory.endswith("/conf"): # or directory.endswith("/logs"):
+            for f in files:
+                with fileinput.FileInput(os.path.join(directory, f), inplace=True) as file:
+                    for line in file:
+                        print(line.replace(source, dest), end='')
 
 def get_eager_protocol_version(cassandra_version):
     """
