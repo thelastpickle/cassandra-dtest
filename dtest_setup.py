@@ -9,6 +9,7 @@ import tempfile
 import subprocess
 import sys
 import errno
+import flamegraph
 import pprint
 from collections import OrderedDict
 
@@ -71,6 +72,7 @@ class DTestSetup(object):
         self.jvm_args = []
         self.create_cluster_func = None
         self.iterations = 0
+        flamegraph.start_profile_thread(fd=open(os.path.join(self.log_saved_dir, "./perf.log"), "w"))
 
     def get_test_path(self):
         test_path = tempfile.mkdtemp(prefix='dtest-')
