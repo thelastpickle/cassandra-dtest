@@ -600,7 +600,7 @@ def pytest_collection_modifyitems(items, config):
             if deselect_test:
                 logger.info("SKIP: Deselecting non-upgrade test %s because of --execute-upgrade-tests-only" % item.name)
 
-        if item.get_closest_marker("resource_intensive") and not collect_only:
+        if item.get_closest_marker("resource_intensive"):
             force_resource_intensive = config.getoption("--force-resource-intensive-tests")
             skip_resource_intensive = config.getoption("--skip-resource-intensive-tests")
             if not force_resource_intensive:
@@ -612,7 +612,7 @@ def pytest_collection_modifyitems(items, config):
                     deselect_test = True
                     logger.info("SKIP: Deselecting resource_intensive test %s due to insufficient system resources" % item.name)
 
-        if not item.get_closest_marker("resource_intensive") and not collect_only:
+        if not item.get_closest_marker("resource_intensive"):
             only_resource_intensive = config.getoption("--only-resource-intensive-tests")
             if only_resource_intensive:
                 deselect_test = True

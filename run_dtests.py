@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-usage: run_dtests.py [-h] [--use-vnodes] [--use-off-heap-memtables] [--num-tokens NUM_TOKENS] [--data-dir-count-per-instance DATA_DIR_COUNT_PER_INSTANCE] [--force-resource-intensive-tests]
+usage: run_dtests.py [-h] [--use-vnodes] [--use-off-heap-memtables] [--num-tokens NUM_TOKENS] [--data-dir-count-per-instance DATA_DIR_COUNT_PER_INSTANCE] [--force-resource-intensive-tests] [--only-resource-intensive-tests]
                      [--skip-resource-intensive-tests] [--cassandra-dir CASSANDRA_DIR] [--cassandra-version CASSANDRA_VERSION] [--delete-logs] [--execute-upgrade-tests] [--execute-upgrade-tests-only] [--disable-active-log-watching]
                      [--keep-test-dir] [--enable-jacoco-code-coverage] [--dtest-enable-debug-logging] [--dtest-print-tests-only] [--dtest-print-tests-output DTEST_PRINT_TESTS_OUTPUT]
                      [--pytest-options PYTEST_OPTIONS] [--dtest-tests DTEST_TESTS]
@@ -12,6 +12,7 @@ optional arguments:
   --num-tokens NUM_TOKENS                                    Number of tokens to set num_tokens yaml setting to when creating instances with vnodes enabled (default: 256)
   --data-dir-count-per-instance DATA_DIR_COUNT_PER_INSTANCE  Control the number of data directories to create per instance (default: 3)
   --force-resource-intensive-tests                           Forces the execution of tests marked as resource_intensive (default: False)
+  --only-resource-intensive-tests                            Only execute tests marked as resource_intensive (default: False)
   --skip-resource-intensive-tests                            Skip all tests marked as resource_intensive (default: False)
   --cassandra-dir CASSANDRA_DIR
   --cassandra-version CASSANDRA_VERSION
