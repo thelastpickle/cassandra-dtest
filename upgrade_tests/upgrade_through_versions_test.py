@@ -18,12 +18,13 @@ from queue import Empty, Full
 from cassandra import ConsistencyLevel, WriteTimeout, DriverException
 from cassandra.query import SimpleStatement
 
-from dtest import RUN_STATIC_UPGRADE_MATRIX, Tester
+from dtest import Tester
 from tools.misc import generate_ssl_stores, new_node
 from .upgrade_manifest import (build_upgrade_pairs,
                                current_2_1_x, current_2_2_x, current_3_0_x,
                                indev_3_11_x,
-                               current_3_11_x, indev_trunk, CASSANDRA_4_0, CASSANDRA_5_0)
+                               current_3_11_x, indev_trunk, CASSANDRA_4_0, CASSANDRA_5_0,
+                               RUN_STATIC_UPGRADE_MATRIX)
 
 logger = logging.getLogger(__name__)
 

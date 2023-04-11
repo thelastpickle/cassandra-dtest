@@ -1,9 +1,8 @@
+import conftest
 import logging
+import os
 
 from collections import namedtuple
-
-from dtest import RUN_STATIC_UPGRADE_MATRIX
-from conftest import cassandra_dir_and_version
 
 import ccmlib.repository
 from ccmlib.common import get_version_from_build
@@ -29,6 +28,9 @@ CASSANDRA_4_0 = '4.0'
 CASSANDRA_4_1 = '4.1'
 CASSANDRA_5_0 = '5.0'
 TRUNK = CASSANDRA_5_0
+
+RUN_STATIC_UPGRADE_MATRIX = os.environ.get('RUN_STATIC_UPGRADE_MATRIX', '').lower() in ('yes', 'true')
+
 
 def is_same_family_current_to_indev(origin, destination):
     """
@@ -143,7 +145,7 @@ class VersionMeta(namedtuple('_VersionMeta', ('name', 'family', 'variant', 'vers
         """
         Returns a new object cloned from this one, with the version replaced with the local env version.
         """
-        cassandra_dir, cassandra_version = cassandra_dir_and_version(CONFIG)
+        cassandra_dir, cassandra_version = conftest.cassandra_dir_and_version(CONFIG)
         if cassandra_version:
             return self._replace(version=cassandra_version)
         return self._replace(version="clone:{}".format(cassandra_dir))

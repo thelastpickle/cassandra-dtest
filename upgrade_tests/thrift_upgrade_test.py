@@ -4,7 +4,7 @@ import logging
 
 from cassandra.query import dict_factory, SimpleStatement
 
-from dtest import RUN_STATIC_UPGRADE_MATRIX, Tester
+from dtest import Tester
 from thrift_bindings.thrift010 import Cassandra
 from thrift_bindings.thrift010.Cassandra import (Column, ColumnDef,
                                                  ColumnParent, ConsistencyLevel,
@@ -15,7 +15,7 @@ from tools.assertions import (assert_all, assert_length_equal,
                               assert_lists_of_dicts_equal)
 from tools.misc import wait_for_agreement, add_skip
 from .upgrade_base import UpgradeTester
-from .upgrade_manifest import build_upgrade_pairs, CASSANDRA_4_0
+from .upgrade_manifest import build_upgrade_pairs, CASSANDRA_4_0, RUN_STATIC_UPGRADE_MATRIX
 
 since = pytest.mark.since
 logger = logging.getLogger(__name__)

@@ -24,6 +24,8 @@ from cassandra.policies import RetryPolicy, RoundRobinPolicy
 from ccmlib.node import ToolError, TimeoutError
 from tools.misc import retry_till_success
 
+from upgrade_tests.upgrade_manifest import build_upgrade_pairs
+
 
 LOG_SAVED_DIR = "logs"
 try:
@@ -42,8 +44,6 @@ config = configparser.RawConfigParser()
 if len(config.read(os.path.expanduser('~/.cassandra-dtest'))) > 0:
     if config.has_option('main', 'default_dir'):
         DEFAULT_DIR = os.path.expanduser(config.get('main', 'default_dir'))
-
-RUN_STATIC_UPGRADE_MATRIX = os.environ.get('RUN_STATIC_UPGRADE_MATRIX', '').lower() in ('yes', 'true')
 
 MAJOR_VERSION_4 = LooseVersion('4.0')
 MAJOR_VERSION_5 = LooseVersion('5.0')
@@ -251,11 +251,19 @@ class Tester(object):
     def set_node_to_current_version(self, node):
         version = os.environ.get('CASSANDRA_VERSION')
 
+        assert_supported_upgrade_path(node.get_cassandra_version(), version)
+
         if version:
             node.set_install_dir(version=version)
         else:
             node.set_install_dir(install_dir=self.dtest_config.cassandra_dir)
             os.environ['CASSANDRA_DIR'] = self.dtest_config.cassandra_dir
+
+    def assert_supported_upgrade_path(self, from_version, to_version):
+        for path in build_upgrade_pairs():
+            if path.starting_version == from_version and path.upgrade_version == to_version:
+                return None
+        pytest.fail("Upgrades from {} to {} are not supported and should not be tested".format(from_version, to_version))
 
     def go(self, func):
         runner = Runner(func)
