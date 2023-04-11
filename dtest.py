@@ -46,6 +46,7 @@ if len(config.read(os.path.expanduser('~/.cassandra-dtest'))) > 0:
 RUN_STATIC_UPGRADE_MATRIX = os.environ.get('RUN_STATIC_UPGRADE_MATRIX', '').lower() in ('yes', 'true')
 
 MAJOR_VERSION_4 = LooseVersion('4.0')
+MAJOR_VERSION_5 = LooseVersion('5.0')
 
 logger = logging.getLogger(__name__)
 

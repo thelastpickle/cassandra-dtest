@@ -189,6 +189,7 @@ def _validate_dense_thrift(client, cf='dense_super_1'):
         assert cosc.super_column.columns[0].value == 'value1'.encode()
 
 @pytest.mark.upgrade_test
+@since('2.1', max_version='4.99')
 class TestUpgradeSuperColumnsThrough(Tester):
     def upgrade_to_version(self, tag, nodes=None):
         logger.debug('Upgrading to ' + tag)
@@ -380,7 +381,7 @@ class TestUpgradeSuperColumnsThrough(Tester):
 
 
 @pytest.mark.upgrade_test
-@since('4.0')
+@since('4.0', max_version='4.99')
 class TestUpgradeTo40(Tester):
     """
     Thrift is dead in 4.0. However, we still want to ensure users that used thrift
