@@ -21,9 +21,10 @@ from cassandra.query import SimpleStatement
 from dtest import Tester
 from tools.misc import generate_ssl_stores, new_node
 from .upgrade_manifest import (build_upgrade_pairs,
-                               current_2_1_x, current_2_2_x, current_3_0_x,
-                               indev_3_11_x,
-                               current_3_11_x, indev_trunk, CASSANDRA_4_0, CASSANDRA_5_0,
+                               current_2_1_x, current_2_2_x,
+                               current_3_0_x, indev_3_11_x, current_3_11_x,
+                               current_4_0_x, indev_4_1_x,
+                               CASSANDRA_4_0, CASSANDRA_5_0,
                                RUN_STATIC_UPGRADE_MATRIX)
 
 logger = logging.getLogger(__name__)
@@ -909,9 +910,9 @@ MULTI_UPGRADES = (
 
     # Proto v4 upgrades (v4 is supported on 2.2, 3.0, 3.1, trunk)
     MultiUpgrade(name='TestProtoV4Upgrade_AllVersions_EndsAt_Trunk_HEAD',
-                 version_metas=[current_2_2_x, current_3_0_x, current_3_11_x, indev_trunk], protocol_version=4, extra_config=None),
+                 version_metas=[current_2_2_x, current_3_0_x, current_3_11_x, current_4_0_x, indev_4_1_x], protocol_version=4, extra_config=None),
     MultiUpgrade(name='TestProtoV4Upgrade_AllVersions_RandomPartitioner_EndsAt_Trunk_HEAD',
-                 version_metas=[current_2_2_x, current_3_0_x, current_3_11_x, indev_trunk], protocol_version=4,
+                 version_metas=[current_2_2_x, current_3_0_x, current_3_11_x, current_4_0_x, indev_4_1_x], protocol_version=4,
                  extra_config=(
                      ('partitioner', 'org.apache.cassandra.dht.RandomPartitioner'),
                  )),
@@ -939,8 +940,9 @@ for upgrade in MULTI_UPGRADES:
                 newmeta = oldmeta.clone_with_local_env_version()
                 logger.debug("{} appears applicable to current env. Overriding final test version from {} to {}".format(upgrade.name, oldmeta.version, newmeta.version))
                 metas[-1] = newmeta
-
-        create_upgrade_class(upgrade.name, [m for m in metas], protocol_version=upgrade.protocol_version, extra_config=upgrade.extra_config)
+                create_upgrade_class(upgrade.name, [m for m in metas], protocol_version=upgrade.protocol_version, extra_config=upgrade.extra_config)
+        else:
+            create_upgrade_class(upgrade.name, [m for m in metas], protocol_version=upgrade.protocol_version, extra_config=upgrade.extra_config)
 
 
 for pair in build_upgrade_pairs():

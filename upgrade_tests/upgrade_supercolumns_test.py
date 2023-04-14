@@ -146,7 +146,7 @@ class TestSCUpgrade(Tester):
 
     def test_upgrade_super_columns_through_all_versions(self):
         self._upgrade_super_columns_through_versions_test(upgrade_path=[indev_2_2_x, indev_3_0_x,
-                                                                        indev_3_11_x, indev_4_0_x, indev_4_1_x])
+                                                                        indev_3_11_x, indev_4_0_x, indev_4_1_x, indev_trunk])
 
     def test_upgrade_super_columns_through_limited_versions(self):
         self._upgrade_super_columns_through_versions_test(upgrade_path=[indev_3_0_x, indev_4_0_x])
