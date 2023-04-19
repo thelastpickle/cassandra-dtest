@@ -21,7 +21,7 @@ from cassandra.query import SimpleStatement
 from dtest import Tester
 from tools.misc import generate_ssl_stores, new_node
 from .upgrade_manifest import (build_upgrade_pairs,
-                               current_2_1_x, current_2_2_x,
+                               current_2_2_x,
                                current_3_0_x, indev_3_11_x, current_3_11_x,
                                current_4_0_x, indev_4_1_x,
                                CASSANDRA_4_0, CASSANDRA_5_0,
@@ -901,9 +901,9 @@ MultiUpgrade = namedtuple('MultiUpgrade', ('name', 'version_metas', 'protocol_ve
 MULTI_UPGRADES = (
     # Proto v3 upgrades (v3 is supported on 2.1, 2.2, 3.0, 3.11)
     MultiUpgrade(name='TestProtoV3Upgrade_AllVersions_EndsAt_3_11_X',
-                 version_metas=[current_2_1_x, current_2_2_x, current_3_0_x, indev_3_11_x], protocol_version=3, extra_config=None),
+                 version_metas=[current_2_2_x, current_3_0_x, indev_3_11_x], protocol_version=3, extra_config=None),
     MultiUpgrade(name='TestProtoV3Upgrade_AllVersions_RandomPartitioner_EndsAt_3_11_X_HEAD',
-                 version_metas=[current_2_1_x, current_2_2_x, current_3_0_x, indev_3_11_x], protocol_version=3,
+                 version_metas=[current_2_2_x, current_3_0_x, indev_3_11_x], protocol_version=3,
                  extra_config=(
                      ('partitioner', 'org.apache.cassandra.dht.RandomPartitioner'),
                  )),
