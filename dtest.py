@@ -248,22 +248,22 @@ class Tester(object):
         self.dtest_config = fixture_dtest_setup.dtest_config
         return None
 
+    def assert_supported_upgrade_path(self, from_version, to_version):
+        for path in build_upgrade_pairs():
+            if path.starting_version == from_version and path.upgrade_version == to_version:
+                return None
+        pytest.fail("Upgrades from {} to {} are not supported and should not be tested".format(from_version, to_version))
+
     def set_node_to_current_version(self, node):
         version = os.environ.get('CASSANDRA_VERSION')
 
-        assert_supported_upgrade_path(node.get_cassandra_version(), version)
+        self.assert_supported_upgrade_path(node.get_cassandra_version(), version)
 
         if version:
             node.set_install_dir(version=version)
         else:
             node.set_install_dir(install_dir=self.dtest_config.cassandra_dir)
             os.environ['CASSANDRA_DIR'] = self.dtest_config.cassandra_dir
-
-    def assert_supported_upgrade_path(self, from_version, to_version):
-        for path in build_upgrade_pairs():
-            if path.starting_version == from_version and path.upgrade_version == to_version:
-                return None
-        pytest.fail("Upgrades from {} to {} are not supported and should not be tested".format(from_version, to_version))
 
     def go(self, func):
         runner = Runner(func)
