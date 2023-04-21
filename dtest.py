@@ -250,7 +250,7 @@ class Tester(object):
 
     def assert_supported_upgrade_path(self, from_version, to_version):
         for path in build_upgrade_pairs():
-            if path.starting_version == from_version and path.upgrade_version == to_version:
+            if from_version.startswith(path.starting_meta.family) and to_version.startswith(path.upgrade_meta.family):
                 return None
         pytest.fail("Upgrades from {} to {} are not supported and should not be tested".format(from_version, to_version))
 
