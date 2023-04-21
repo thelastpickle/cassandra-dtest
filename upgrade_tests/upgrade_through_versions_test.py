@@ -929,7 +929,7 @@ MULTI_UPGRADES = (
 
     #Beta versions don't work with this test since it doesn't specify use beta in the client
     # Proto v6 upgrades (v6 is supported on 5.0, trunk)
-    # MultiUpgrade(name='TestProtoV5Upgrade_AllVersions_EndsAt_Trunk_HEAD',
+    # MultiUpgrade(name='TestProtoV6Upgrade_AllVersions_EndsAt_Trunk_HEAD',
     #              version_metas=[current_5_0_x, indev_trunk], protocol_version=6, extra_config=None),
     # MultiUpgrade(name='TestProtoV6Upgrade_AllVersions_RandomPartitioner_EndsAt_Trunk_HEAD',
     #              version_metas=[current_5_0_x, indev_trunk], protocol_version=6,
