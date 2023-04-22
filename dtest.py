@@ -21,6 +21,7 @@ from cassandra import ConsistencyLevel, OperationTimedOut
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import ExecutionProfile
 from cassandra.policies import RetryPolicy, RoundRobinPolicy
+from ccmlib.common import get_version_from_build
 from ccmlib.node import ToolError, TimeoutError
 from tools.misc import retry_till_success
 
@@ -257,11 +258,11 @@ class Tester(object):
     def set_node_to_current_version(self, node):
         version = os.environ.get('CASSANDRA_VERSION')
 
-        self.assert_supported_upgrade_path(node.get_cassandra_version(), version)
-
         if version:
+            self.assert_supported_upgrade_path(node.get_cassandra_version().vstring, version)
             node.set_install_dir(version=version)
         else:
+            self.assert_supported_upgrade_path(node.get_cassandra_version().vstring, get_version_from_build(self.dtest_config.cassandra_dir).vstring)
             node.set_install_dir(install_dir=self.dtest_config.cassandra_dir)
             os.environ['CASSANDRA_DIR'] = self.dtest_config.cassandra_dir
 
