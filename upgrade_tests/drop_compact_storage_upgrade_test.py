@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 VERSION_30 = 'github:apache/cassandra-3.0'
 VERSION_311 = 'github:apache/cassandra-3.11'
-VERSION_TRUNK = 'github:apache/trunk'
+VERSION_40 = 'github:apache/cassandra-4.0'
 
 
 @pytest.mark.upgrade_test
