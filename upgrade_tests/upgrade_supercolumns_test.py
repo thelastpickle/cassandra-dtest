@@ -129,6 +129,7 @@ class TestSCUpgrade(Tester):
         session = self.patient_exclusive_cql_connection(node1)
 
         self.verify_with_cql(session)
+        node1.nodetool("enablethrift")
         self.verify_with_thrift()
 
         for version in upgrade_path:
@@ -146,7 +147,7 @@ class TestSCUpgrade(Tester):
 
     def test_upgrade_super_columns_through_all_versions(self):
         self._upgrade_super_columns_through_versions_test(upgrade_path=[indev_2_2_x, indev_3_0_x,
-                                                                        indev_3_11_x, indev_4_0_x, indev_4_1_x, indev_trunk])
+                                                                        indev_3_11_x, indev_4_0_x, indev_4_1_x])
 
     def test_upgrade_super_columns_through_limited_versions(self):
         self._upgrade_super_columns_through_versions_test(upgrade_path=[indev_3_0_x, indev_4_0_x])

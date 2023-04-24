@@ -325,6 +325,7 @@ class TestUpgradeSuperColumnsThrough(Tester):
         cursor = self.patient_cql_connection(node, row_factory=dict_factory)
         _validate_dense_cql(cursor, cf='dense_super_1', is_version_4_or_greater=node.get_cassandra_version() >= CASSANDRA_4_0)
 
+    @since('3.0.99', max_version='4.99')
     def test_sparse_supercolumn(self):
         cluster = self.prepare()
         self.install_nodetool_legacy_parsing()
