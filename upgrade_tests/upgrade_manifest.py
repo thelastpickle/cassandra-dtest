@@ -153,6 +153,7 @@ class VersionMeta(namedtuple('_VersionMeta', ('name', 'family', 'variant', 'vers
 
 # TODO define new versions whenever Cassandra is branched
 
+indev_2_1_x = VersionMeta(name='indev_2_1_x', family=CASSANDRA_2_1, variant='indev', version='github:apache/cassandra-2.1', min_proto_v=1, max_proto_v=3, java_versions=(7, 8))
 current_2_1_x = VersionMeta(name='current_2_1_x', family=CASSANDRA_2_1, variant='current', version='2.1.22', min_proto_v=1, max_proto_v=3, java_versions=(7, 8))
 
 indev_2_2_x = VersionMeta(name='indev_2_2_x', family=CASSANDRA_2_2, variant='indev', version='github:apache/cassandra-2.2', min_proto_v=1, max_proto_v=3, java_versions=(7, 8))
@@ -190,6 +191,7 @@ MANIFEST = {
     current_4_0_x: [indev_4_0_x, indev_4_1_x, indev_trunk],
     current_4_1_x: [indev_4_1_x, indev_trunk],
 
+    indev_2_1_x: [indev_2_2_x, indev_3_0_x, indev_3_11_x],
     indev_2_2_x: [indev_3_0_x, indev_3_11_x],
     indev_3_0_x: [indev_3_11_x, indev_4_0_x, indev_4_1_x],
     indev_3_11_x: [indev_4_0_x, indev_4_1_x],
