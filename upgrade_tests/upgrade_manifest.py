@@ -53,7 +53,7 @@ class VersionSelectionStrategies(Enum):
     """
     INDEV=(lambda origin, destination: origin.variant == 'indev' and destination.variant == 'indev' or is_same_family_current_to_indev(origin, destination),)
     """
-    Test upgrading from releases to the latest release as well as from the current release to the indev tip 
+    Test upgrading from releases to the latest release as well as from the current release to the indev tip
     within the same version.
     """
     RELEASES=(lambda origin, destination: not VersionSelectionStrategies.INDEV.value[0](origin, destination) or is_same_family_current_to_indev(origin, destination),)
