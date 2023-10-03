@@ -5,6 +5,7 @@ import sys
 import time
 import pytest
 import logging
+import subprocess
 
 from abc import ABCMeta
 
@@ -86,6 +87,13 @@ class UpgradeTester(Tester, metaclass=ABCMeta):
         cluster = self.cluster
 
         cluster.set_install_dir(version=self.UPGRADE_PATH.starting_version)
+
+        logger.info("install_dir {} exists {}. debug df and mount…"
+                    .format(cluster.get_install_dir(), os.path.exists(cluster.get_install_dir())))
+
+        subprocess.Popen(["df", "-h"])
+        subprocess.Popen(["mount"])
+
         self.install_nodetool_legacy_parsing()
         self.fixture_dtest_setup.reinitialize_cluster_for_different_version()
 
