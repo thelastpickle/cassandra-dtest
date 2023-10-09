@@ -5229,7 +5229,6 @@ class TestCQL(UpgradeTester):
             assert_one(cursor, "SELECT writetime(v) FROM TEST WHERE k = 1", [-42])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_map_key_single_row(self):
         cursor = self.prepare()
 
@@ -5257,7 +5256,6 @@ class TestCQL(UpgradeTester):
             assert_one(cursor, "SELECT sizeof(v) FROM test where k = 0", [4])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_set_key_single_row(self):
         cursor = self.prepare()
 
@@ -5288,7 +5286,6 @@ class TestCQL(UpgradeTester):
             assert_one(cursor, "SELECT sizeof(v) FROM test where k = 0", [4])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_list_key_single_row(self):
         cursor = self.prepare()
 
@@ -5316,7 +5313,6 @@ class TestCQL(UpgradeTester):
             assert_one(cursor, "SELECT sizeof(v) FROM test where k = 0", [4])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_map_key_multi_row(self):
         cursor = self.prepare()
 
@@ -5345,7 +5341,6 @@ class TestCQL(UpgradeTester):
             assert_all(cursor, "SELECT sizeof(v) FROM test", [[4], [4]])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_set_key_multi_row(self):
         cursor = self.prepare()
 
@@ -5376,7 +5371,6 @@ class TestCQL(UpgradeTester):
             assert_all(cursor, "SELECT sizeof(v) FROM test", [[4], [4]])
 
     @since('2.2')
-    @pytest.mark.skip(reason='awaiting CASSANDRA-7396')
     def test_select_list_key_multi_row(self):
         cursor = self.prepare()
 
