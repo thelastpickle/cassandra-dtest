@@ -92,7 +92,7 @@ def pytest_addoption(parser):
                           "after the test fails")
     parser.addoption("--enable-jacoco-code-coverage", action="store_true", default=False,
                      help="Enable JaCoCo Code Coverage Support")
-    parser.addoption("--upgrade-version-selection", action="store", default="indev",
+    parser.addoption("--upgrade-version-selection", action="store", default="both",
                      help="Specify whether to run indev, releases, or both")
     parser.addoption("--upgrade-target-version-only", action="store_true", default=False,
                      help="When running upgrade tests, only run tests upgrading to the current version")
