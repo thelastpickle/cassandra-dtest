@@ -3424,7 +3424,7 @@ class TestPagingWithDeletions(BasePagingTester, PageAssertionMixin):
 
         self.fixture_dtest_setup.allow_log_errors = True
         self.cluster.set_configuration_options(
-            values={'tombstone_failure_threshold': 500}
+            values={'tombstone_failure_threshold': 500, 'tombstone_warn_threshold': 501}
         )
         self.session = self.prepare()
         self.setup_data()
