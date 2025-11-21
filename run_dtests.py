@@ -88,7 +88,6 @@ class RunDTests():
         args = parser.parse_args()
 
         if args.dtest_enable_debug_logging:
-            logger.error('ENABLING DEBUG LOGGING IN run_dtests.py')
             logging.root.setLevel(logging.DEBUG)
             logger.setLevel(logging.DEBUG)
 
@@ -111,7 +110,6 @@ class RunDTests():
             args_to_invoke_pytest.append("'{the_arg}'".format(the_arg=arg))
 
         if args.dtest_print_tests_only:
-            logger.error('got dtest_print_tests_only; appending --collect-only and -q')
             args_to_invoke_pytest.append("'--collect-only'")
             args_to_invoke_pytest.append("'-q'")
 
@@ -120,7 +118,6 @@ class RunDTests():
                 args_to_invoke_pytest.append("'{test_name}'".format(test_name=test))
 
         args_to_invoke_pytest.append("'--ignore=meta_tests'")
-        args_to_invoke_pytest.append("'--log-level=DEBUG'")
 
         original_raw_cmd_args = ", ".join(args_to_invoke_pytest)
 
@@ -136,15 +133,9 @@ class RunDTests():
             "sys.exit(pytest.main([{options}]))\n".format(options=original_raw_cmd_args))
         temp = NamedTemporaryFile(dir=getcwd())
         logger.debug('Writing to {} the following:\n {}'.format(temp.name, to_execute.encode("utf-8")))
-        logger.error(f'temp file is: {temp.name}')
 
         temp.write(to_execute.encode("utf-8"))
         temp.flush()
-
-        logger.error(f'GREP: Contents of the temp file we are going to execute:')
-        with open(temp.name) as f:
-            for line in f:
-                logger.error(f'   [{line}]')
 
         # We pass nose_argv as options to the python call to maintain
         # compatibility with the nosetests command. Arguments passed in via the
@@ -154,17 +145,12 @@ class RunDTests():
         cmd_list = [sys.executable, temp.name]
         logger.debug('subprocess.call-ing {cmd_list}'.format(cmd_list=cmd_list))
 
-        logger.error(f'about to subprocess cmd: {cmd_list}')
         sp = subprocess.Popen(cmd_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=os.environ.copy())
 
         if args.dtest_print_tests_only:
-            logger.error('Confirmed: entering print only mode')
             stdout, stderr = sp.communicate()
 
             if sp.returncode != 0:
-                logger.error(f'returncode non-zero; exiting. Was: {sp.returncode}')
-                logger.error(f'Contents of stdout: {stdout.decode("utf-8")}')
-                logger.error(f'Contents of stderr: {stderr.decode("utf-8")}')
                 print(stderr.decode("utf-8"))
                 result = sp.returncode
                 exit(result)
@@ -197,11 +183,9 @@ class RunDTests():
 
 
 def collect_test_modules(stdout):
-    logger.error(f'collect_test_modules enter.')
     test_regex_pattern = re.compile(r".+::.+::.+")
     all_collected_test_modules = []
     for line in stdout.decode("utf-8").split('\n'):
-        logger.error(f'GREP: Processing line from stdout: {line}')
         re_ret = re.search(test_regex_pattern, line)
         if re_ret:
             all_collected_test_modules.append(line)
