@@ -69,7 +69,10 @@ class BaseReplaceAddressTest(Tester):
             self.cluster.set_install_dir(version="2.2.4")
             self.install_nodetool_legacy_parsing()
 
-        jvm_args = []
+        # Skip paxos repair during topology changes when testing with replicas down,
+        # as paxos repair requires reaching other nodes. This is necessary with Paxos v2 enabled.
+        jvm_args = ["-Dcassandra.skip_paxos_repair_on_topology_change=true"]
+
         if self.cluster.cassandra_version() >= '4.0':
             jvm_args.append("-Dcassandra.failed_bootstrap_timeout_ms=30000")
 
@@ -117,7 +120,8 @@ class BaseReplaceAddressTest(Tester):
         extra_jvm_args.extend(["-Dcassandra.{}={}".format(jvm_option, replace_address),
                                "-Dcassandra.ring_delay_ms=10000",
                                "-Dcassandra.broadcast_interval_ms=10000",
-                               "-Dcassandra.reset_bootstrap_progress=false"])
+                               "-Dcassandra.reset_bootstrap_progress=false",
+                               "-Dcassandra.skip_paxos_repair_on_topology_change=true"])
 
         self.replacement_node.start(jvm_args=extra_jvm_args,
                                     wait_for_binary_proto=wait_for_binary_proto, wait_other_notice=wait_other_notice)
