@@ -403,7 +403,7 @@ class DTestSetup(object):
         the test as a failure, but may prevent jacoco results from being recorded.
         """
         try:
-            self.cluster.stop(gently)
+            self.cluster.stop(gently=gently)
         except NodeError as e:
             if gently:
                 logger.debug("Exception stopping cluster with gently=True, retrying with gently=False: {0}".format(e))
